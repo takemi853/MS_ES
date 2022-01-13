@@ -615,7 +615,7 @@ def main_loop(ms):
 
 # 長期実行用
 # 10個のMS を得るまで
-n = 20
+n = 10
 magic_sum = n * (n * n + 1) / 2
 
 
@@ -656,7 +656,7 @@ def main():
                     count += 1
                     df_log = df_log.append({'ms': ms, 'generation': i},
                                            ignore_index=True)
-                    df_log.to_csv('./log_ms10.csv')
+                    df_log.to_csv(f'./log_ms{n}.csv')
                     break
                 elif fitness_semi(ms) == 0 and flg == False:
                     print(str(i) + "step")
