@@ -686,7 +686,7 @@ def main():
             # if min_semi > fitness_semi(ms):
             #   min_semi =  fitness_semi(ms)
             # print(f'min : {min_semi}')
-            print(f"row:{n - count_line_row(ms)}, col:{n - count_line_col(ms)}")
+            # print(f"row:{n - count_line_row(ms)}, col:{n - count_line_col(ms)}")
         else:
             print(str(num) + " Loop")
             break
