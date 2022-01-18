@@ -16,7 +16,7 @@ import argparse
 
 # 引数設定
 parser = argparse.ArgumentParser()
-parser.add_argument('--n',type = int, help='次数')
+parser.add_argument('--n', type=int, help='次数')
 parser.add_argument(
     '-sf',
     '--semi_ms_flg',
@@ -696,6 +696,15 @@ def main():
                             break
                     flg_count += flg_rate
                     _ms = copy.deepcopy(ms)
+                print(
+                    fitness_semi(ms),
+                    fitness_all(ms),
+                    count,
+                    semi_count,
+                    i,
+                    round(
+                        flg_count,
+                        1))
 
         elif semi_ms_flg == True:
             if semi_count < 10:
@@ -739,15 +748,15 @@ def main():
                             break
                     flg_count += flg_rate
                     _ms = copy.deepcopy(ms)
-            print(
-                fitness_semi(ms),
-                fitness_all(ms),
-                count,
-                semi_count,
-                i,
-                round(
-                    flg_count,
-                    1))
+                print(
+                    fitness_semi(ms),
+                    fitness_all(ms),
+                    count,
+                    semi_count,
+                    i,
+                    round(
+                        flg_count,
+                        1))
             # if min_semi > fitness_semi(ms):
             #   min_semi =  fitness_semi(ms)
             # print(f'min : {min_semi}')
