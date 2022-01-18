@@ -12,6 +12,15 @@ import pprint
 from tqdm import tqdm
 import pandas as pd
 
+import argparse
+
+# 引数設定
+parser = argparse.ArgumentParser()
+parser.add_argument('--n', help = '次数')
+parser.add_argument('-sf','--semi_ms_flg', help = '半魔方陣を求めるなら True')
+args = parser.parse_args()
+
+
 # n次魔方陣のランダム初期化
 
 
@@ -615,12 +624,15 @@ def main_loop(ms):
 
 # 長期実行用
 # 10個のMS を得るまで
-n = 10
+n = args.n
 magic_sum = n * (n * n + 1) / 2
+semi_ms_flg = False
+semi_ms_flg = args.semi_ms_flg
 
 
 def main():
     df_log = pd.read_csv('./log.csv')
+    df_semi_log = pd.read_csv('./log.csv')
     _ms = []
 
     ms_list = []
@@ -635,45 +647,90 @@ def main():
         flg_count = 0
         dup_count = 0  # dup: Duplicate (重複)解のカウント
         flg = False
-        # if len(ms_count)<10:
-        if semi_count < 10:
-            ms = initMS(n)
-            for i in tqdm(range(1000000)):
-                # for i in (range(100000)):
-                ms, ms_children, flg_rate = main_loop(ms)
-                # print(flg_rate)
-                # ms, ms_children = main_loop(ms)
-                # pprint.pprint(ms)
-                # if i%10000==0:
-                #   print(fitness_semi(ms), fitness_all(ms))
-                #   if i%1000==0:
-                #     print(np.reshape(ms[0],(n,n)))
-                if fitness_all(ms) == 0:
-                    print(str(i) + "step")
-                    ms_count.append(i)
-                    print(np.reshape(ms[0], (n, n)))
-                    ms_list.append(ms[0])
-                    count += 1
-                    df_log = df_log.append({'ms': ms, 'generation': i},
-                                           ignore_index=True)
-                    df_log.to_csv(f'./log_ms{n}.csv')
-                    break
-                elif fitness_semi(ms) == 0 and flg == False:
-                    print(str(i) + "step")
-                    semi_ms_count.append(i)
-                    print(np.reshape(ms[0], (n, n)))
-                    semi_ms_list.append(ms[0])
-                    semi_count += 1
-                    flg = True
-
-                # Early Stopping (100回以上 同じ解をとったらストップ)
-                if ms == _ms:
-                    # dup_count += (1 - flg_rate)
-                    dup_count += 1
-                    if dup_count >= 100:
+        
+        # 魔方陣を求める場合
+        if semi_ms_flg == False:
+            if len(ms_count) < 10:
+                ms = initMS(n)
+                # for i in tqdm(range(1000000)):
+                for i in (range(100000)):
+                    ms, ms_children, flg_rate = main_loop(ms)
+                    # print(flg_rate)
+                    # ms, ms_children = main_loop(ms)
+                    # pprint.pprint(ms)
+                    # if i%10000==0:
+                    #   print(fitness_semi(ms), fitness_all(ms))
+                    #   if i%1000==0:
+                    #     print(np.reshape(ms[0],(n,n)))
+                    if fitness_all(ms) == 0:
+                        print(str(i) + "step")
+                        ms_count.append(i)
+                        print(np.reshape(ms[0], (n, n)))
+                        ms_list.append(ms[0])
+                        count += 1
+                        df_log = df_log.append({'ms': ms, 'generation': i},
+                                            ignore_index=True)
+                        df_log.to_csv(f'./log_ms{n}.csv')
                         break
-                flg_count += flg_rate
-                _ms = copy.deepcopy(ms)
+                    elif fitness_semi(ms) == 0 and flg == False:
+                        print(str(i) + "step")
+                        semi_ms_count.append(i)
+                        print(np.reshape(ms[0], (n, n)))
+                        semi_ms_list.append(ms[0])
+                        semi_count += 1
+                        flg = True
+
+                    # Early Stopping (100回以上 同じ解をとったらストップ)
+                    if ms == _ms:
+                        # dup_count += (1 - flg_rate)
+                        dup_count += 1
+                        if dup_count >= 100:
+                            break
+                    flg_count += flg_rate
+                    _ms = copy.deepcopy(ms)
+
+        elif semi_ms_flg == True:
+            if semi_count < 10:
+                ms = initMS(n)
+                for i in tqdm(range(1000000)):
+                    ms, ms_children, flg_rate = main_loop(ms)
+                    # print(flg_rate)
+                    # ms, ms_children = main_loop(ms)
+                    # pprint.pprint(ms)
+                    # if i%10000==0:
+                    #   print(fitness_semi(ms), fitness_all(ms))
+                    #   if i%1000==0:
+                    #     print(np.reshape(ms[0],(n,n)))
+                    if fitness_all(ms) == 0:
+                        print(str(i) + "step")
+                        ms_count.append(i)
+                        print(np.reshape(ms[0], (n, n)))
+                        ms_list.append(ms[0])
+                        count += 1
+                        df_log = df_log.append({'ms': ms, 'generation': i},
+                                            ignore_index=True)
+                        df_log.to_csv(f'./log_ms{n}.csv')
+                        break
+                    elif fitness_semi(ms) == 0 and flg == False:
+                        print(str(i) + "step")
+                        semi_ms_count.append(i)
+                        print(np.reshape(ms[0], (n, n)))
+                        semi_ms_list.append(ms[0])
+                        semi_count += 1
+                        flg = True
+                        if semi_ms_flg == True:
+                            df_semi_log = df_semi_log.append({'ms': ms, 'generation': i},
+                                                ignore_index=True)
+                            df_semi_log.to_csv(f'./log_semi_ms{n}.csv')
+
+                    # Early Stopping (100回以上 同じ解をとったらストップ)
+                    if ms == _ms:
+                        # dup_count += (1 - flg_rate)
+                        dup_count += 1
+                        if dup_count >= 100:
+                            break
+                    flg_count += flg_rate
+                    _ms = copy.deepcopy(ms)
             print(
                 fitness_semi(ms),
                 fitness_all(ms),
