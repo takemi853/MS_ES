@@ -16,8 +16,17 @@ import argparse
 
 # 引数設定
 parser = argparse.ArgumentParser()
-parser.add_argument('--n', help = '次数')
-parser.add_argument('-sf','--semi_ms_flg', help = '半魔方陣を求めるなら True')
+parser.add_argument('--n',type = int, help='次数')
+parser.add_argument(
+    '-sf',
+    '--semi_ms_flg',
+    help='半魔方陣を求めるなら True',
+    action='store_true')
+# parser.add_argument(
+#     '-sf',
+#     '--semi_ms_flg',
+#     help='半魔方陣を求めるなら True',
+#     default=False)
 args = parser.parse_args()
 
 
@@ -624,9 +633,8 @@ def main_loop(ms):
 
 # 長期実行用
 # 10個のMS を得るまで
-n = args.n
+n = int(args.n)
 magic_sum = n * (n * n + 1) / 2
-semi_ms_flg = False
 semi_ms_flg = args.semi_ms_flg
 
 
@@ -647,7 +655,7 @@ def main():
         flg_count = 0
         dup_count = 0  # dup: Duplicate (重複)解のカウント
         flg = False
-        
+
         # 魔方陣を求める場合
         if semi_ms_flg == False:
             if len(ms_count) < 10:
@@ -669,7 +677,7 @@ def main():
                         ms_list.append(ms[0])
                         count += 1
                         df_log = df_log.append({'ms': ms, 'generation': i},
-                                            ignore_index=True)
+                                               ignore_index=True)
                         df_log.to_csv(f'./log_ms{n}.csv')
                         break
                     elif fitness_semi(ms) == 0 and flg == False:
@@ -708,7 +716,7 @@ def main():
                         ms_list.append(ms[0])
                         count += 1
                         df_log = df_log.append({'ms': ms, 'generation': i},
-                                            ignore_index=True)
+                                               ignore_index=True)
                         df_log.to_csv(f'./log_ms{n}.csv')
                         break
                     elif fitness_semi(ms) == 0 and flg == False:
@@ -720,7 +728,7 @@ def main():
                         flg = True
                         if semi_ms_flg == True:
                             df_semi_log = df_semi_log.append({'ms': ms, 'generation': i},
-                                                ignore_index=True)
+                                                             ignore_index=True)
                             df_semi_log.to_csv(f'./log_semi_ms{n}.csv')
 
                     # Early Stopping (100回以上 同じ解をとったらストップ)
