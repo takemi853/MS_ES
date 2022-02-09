@@ -661,7 +661,8 @@ def main():
             if len(ms_count) < 10:
                 ms = initMS(n)
                 # for i in tqdm(range(1000000)):
-                for i in (range(100000)):
+                for i in (range(100 * n)):
+                    # for i in (range(100000)):
                     ms, ms_children, flg_rate = main_loop(ms)
                     # print(flg_rate)
                     # ms, ms_children = main_loop(ms)
@@ -678,7 +679,7 @@ def main():
                         count += 1
                         df_log = df_log.append({'ms': ms, 'generation': i},
                                                ignore_index=True)
-                        df_log.to_csv(f'./log_ms{n}.csv')
+                        df_log.to_csv(f'./log_ms{n}.csv', index=False)
                         break
                     elif fitness_semi(ms) == 0 and flg == False:
                         print(str(i) + "step")
@@ -706,6 +707,7 @@ def main():
                         flg_count,
                         1))
 
+        # 半魔方陣を求める場合
         elif semi_ms_flg == True:
             if semi_count < 10:
                 ms = initMS(n)
@@ -726,7 +728,7 @@ def main():
                         count += 1
                         df_log = df_log.append({'ms': ms, 'generation': i},
                                                ignore_index=True)
-                        df_log.to_csv(f'./log_ms{n}.csv')
+                        df_log.to_csv(f'./log_ms{n}.csv', drop=True)
                         break
                     elif fitness_semi(ms) == 0 and flg == False:
                         print(str(i) + "step")
@@ -738,7 +740,8 @@ def main():
                         if semi_ms_flg == True:
                             df_semi_log = df_semi_log.append({'ms': ms, 'generation': i},
                                                              ignore_index=True)
-                            df_semi_log.to_csv(f'./log_semi_ms{n}.csv')
+                            df_semi_log.to_csv(
+                                f'./log_semi_ms{n}.csv', index=False)
 
                     # Early Stopping (100回以上 同じ解をとったらストップ)
                     if ms == _ms:
