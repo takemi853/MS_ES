@@ -11,6 +11,7 @@ import numpy as np
 import pprint
 from tqdm import tqdm
 import pandas as pd
+import glob
 
 import argparse
 
@@ -639,10 +640,20 @@ semi_ms_flg = args.semi_ms_flg
 
 
 def main():
-    df_log = pd.read_csv('./log.csv')
-    df_semi_log = pd.read_csv('./log.csv')
-    _ms = []
+    ms_filename = f'./log_ms{n}.csv'
+    semi_ms_filename = f'./log_semi_ms{n}.csv'
+    if len(glob.glob(f'{ms_filename}'))!=0:
+        df_log = pd.read_csv(f'{ms_filename}')
+    else:
+        df_log = pd.read_csv('./log.csv')
 
+
+    if len(glob.glob(f'{semi_ms_filename}'))!=0:
+        df_semi_log = pd.read_csv(f'{semi_ms_filename}')
+    else:
+        df_semi_log = pd.read_csv('./log.csv')
+
+    _ms = []
     ms_list = []
     ms_count = []
     semi_ms_list = []
@@ -662,7 +673,8 @@ def main():
                 ms = initMS(n)
                 # for i in tqdm(range(1000000)):
                 for i in (range(100 * n)):
-                    # for i in (range(100000)):
+                # for i in (range(100000)):
+                    start = time.time()
                     ms, ms_children, flg_rate = main_loop(ms)
                     # print(flg_rate)
                     # ms, ms_children = main_loop(ms)
@@ -677,9 +689,9 @@ def main():
                         print(np.reshape(ms[0], (n, n)))
                         ms_list.append(ms[0])
                         count += 1
-                        df_log = df_log.append({'ms': ms, 'generation': i},
+                        df_log = df_log.append({'ms': ms, 'generation': i, 'time': time.time() - start},
                                                ignore_index=True)
-                        df_log.to_csv(f'./log_ms{n}.csv', index=False)
+                        df_log.to_csv(f'{ms_filename}', index=False)
                         break
                     elif fitness_semi(ms) == 0 and flg == False:
                         print(str(i) + "step")
@@ -728,7 +740,7 @@ def main():
                         count += 1
                         df_log = df_log.append({'ms': ms, 'generation': i},
                                                ignore_index=True)
-                        df_log.to_csv(f'./log_ms{n}.csv', drop=True)
+                        df_log.to_csv(f'{ms_filename}', drop=True)
                         break
                     elif fitness_semi(ms) == 0 and flg == False:
                         print(str(i) + "step")
@@ -741,7 +753,7 @@ def main():
                             df_semi_log = df_semi_log.append({'ms': ms, 'generation': i},
                                                              ignore_index=True)
                             df_semi_log.to_csv(
-                                f'./log_semi_ms{n}.csv', index=False)
+                                f'{semi_ms_filename}', index=False)
 
                     # Early Stopping (100回以上 同じ解をとったらストップ)
                     if ms == _ms:
