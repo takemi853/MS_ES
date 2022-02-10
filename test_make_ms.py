@@ -205,14 +205,16 @@ def update_s2toall(ms, i, j, s2_list):
     # improved_EA number1
     n_row = count_line_row(ms)
     n_col = count_line_col(ms)
-    if n_row + n_col != 0:
-        sigma_t = fitness_semi(ms) / (n_row + n_col)
-    else:
-        sigma_t = fitness_dia(ms) / count_line_dia(ms)
-    sigma_t = int(sigma_t + 0.99)  # 検討要 (切り上げ)
+    # if n_row + n_col != 0:
+    #     sigma_t = fitness_semi(ms) / (n_row + n_col)
+    # else:
+    #     sigma_t = fitness_dia(ms) / count_line_dia(ms)
+    # sigma_t = int(sigma_t + 0.99)  # 検討要 (切り上げ)
 
-    if sigma_star < 1 or sigma_star > sigma_t:
-        ms_child[1][index] = random.randint(1, sigma_t)
+    # if sigma_star < 1 or sigma_star > sigma_t:
+    # ms_child[1][index] = random.randint(1, sigma_t)
+    if sigma_star < 1:
+        ms_child[1][index] = 1
     else:
         ms_child[1][index] = sigma_star
 
@@ -278,15 +280,16 @@ def update_ms_tos2(ms, i, j, s2_list):
     # improved_EA number1
     n_row = count_line_row(ms)
     n_col = count_line_col(ms)
-    if n_row + n_col != 0:
-        sigma_t = fitness_semi(ms) / (n_row + n_col)
-    else:
-        sigma_t = fitness_dia(ms) / count_line_dia(ms)
-    sigma_t = int(sigma_t + 0.99)  # 検討要 (切り上げ)
+    # if n_row + n_col != 0:
+    #     sigma_t = fitness_semi(ms) / (n_row + n_col)
+    # else:
+    #     sigma_t = fitness_dia(ms) / count_line_dia(ms)
+    # sigma_t = int(sigma_t + 0.99)  # 検討要 (切り上げ)
 
-    if sigma_star < 1 or sigma_star > sigma_t:
-        ms_child[1][index] = random.randint(1, sigma_t)
-        return ms_child, flg
+    # if sigma_star < 1 or sigma_star > sigma_t:
+    # ms_child[1][index] = random.randint(1, sigma_t)
+    if sigma_star < 1:
+        ms_child[1][index] = 1
     else:
         ms_child[1][index] = sigma_star
 
@@ -640,15 +643,15 @@ semi_ms_flg = args.semi_ms_flg
 
 
 def main():
-    ms_filename = f'./log_ms{n}.csv'
+    ms_filename = f'./log_ms{n}_without_sigma_t.csv'
     semi_ms_filename = f'./log_semi_ms{n}.csv'
     # 既存ファイルがあれば更新, 無ければ新規作成
-    if len(glob.glob(f'{ms_filename}'))!=0:
+    if len(glob.glob(f'{ms_filename}')) != 0:
         df_log = pd.read_csv(f'{ms_filename}')
     else:
         df_log = pd.read_csv('./log.csv')
 
-    if len(glob.glob(f'{semi_ms_filename}'))!=0:
+    if len(glob.glob(f'{semi_ms_filename}')) != 0:
         df_semi_log = pd.read_csv(f'{semi_ms_filename}')
     else:
         df_semi_log = pd.read_csv('./log.csv')
@@ -669,11 +672,11 @@ def main():
 
         # 魔方陣を求める場合
         if semi_ms_flg == False:
-            if len(ms_count) < 10:
+            if len(ms_count) < 100:
                 ms = initMS(n)
                 # for i in tqdm(range(1000000)):
                 for i in (range(100 * n)):
-                # for i in (range(100000)):
+                    # for i in (range(100000)):
                     start = time.time()
                     ms, ms_children, flg_rate = main_loop(ms)
                     # print(flg_rate)
