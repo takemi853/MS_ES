@@ -1,7 +1,9 @@
 ## このリポジトリについて
-「魔方陣の生成」を 下記論文の進化戦略のアルゴリズムを元に実装したリポジトリです。
+「魔方陣の生成」を 下記論文の進化戦略のアルゴリズムを元に実装したリポジトリです
 
-An evolutionary algorithm for magic squares
+[An evolutionary algorithm for magic squares](https://ieeexplore.ieee.org/abstract/document/1299763)
+
+
 
 ## Quick Start
 指定の大きさの魔方陣を 100個 出力します
