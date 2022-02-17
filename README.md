@@ -4,11 +4,12 @@
 An evolutionary algorithm for magic squares
 
 ## Quick Start
-`$ python main.py --n <次数> -output_path '.'`
+指定の大きさの魔方陣を 100個 出力します
+`$ python main.py --n <次数> --output_path <出力先のパス>`
 
-`例) $ python main.py --n 5` ( 5次魔方陣の生成 )
+`例) $ python main.py --n 5 --output_path .` ( 5次魔方陣の生成 )
 
 ## 引数の説明
 - --n : 次数 (魔方陣の1辺の長さ)
 - -sf : semi-magic_square flag (半魔方陣も生成するなら True), default = False
-- -output_path : 魔方陣の出力ファイルのパス指定 (必須)
+- --output_path : 魔方陣の出力ファイルのパス指定 (必須)

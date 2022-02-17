@@ -23,6 +23,11 @@ parser.add_argument(
     '--semi_ms_flg',
     help='半魔方陣を求めるなら True',
     action='store_true')
+parser.add_argument(
+    '--output_path', type = str,
+    default = '../ms_log/',
+    help='魔方陣の出力先のパス指定',
+    )
 # parser.add_argument(
 #     '-sf',
 #     '--semi_ms_flg',
@@ -630,11 +635,11 @@ def main_loop(ms):
 n = int(args.n)
 magic_sum = n * (n * n + 1) / 2
 semi_ms_flg = args.semi_ms_flg
-
+args.output_path
 
 def main():
-    ms_filename = f'../ms_log/log_ms{n}_220215.csv'
-    semi_ms_filename = f'../ms_log/log_semi_ms{n}.csv'
+    ms_filename = args.output_path + f'log_ms{n}_220215.csv'
+    semi_ms_filename = args.output_path + f'log_semi_ms{n}.csv'
     # 既存ファイルがあれば更新, 無ければ新規作成
     if len(glob.glob(f'{ms_filename}')) != 0:
         df_log = pd.read_csv(f'{ms_filename}')
