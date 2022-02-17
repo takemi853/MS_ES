@@ -638,7 +638,7 @@ semi_ms_flg = args.semi_ms_flg
 args.output_path
 
 def main():
-    ms_filename = args.output_path + f'log_ms{n}_220215.csv'
+    ms_filename = args.output_path + f'log_ms{n}.csv'
     semi_ms_filename = args.output_path + f'log_semi_ms{n}.csv'
     # 既存ファイルがあれば更新, 無ければ新規作成
     if len(glob.glob(f'{ms_filename}')) != 0:

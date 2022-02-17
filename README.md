@@ -5,9 +5,15 @@ An evolutionary algorithm for magic squares
 
 ## Quick Start
 指定の大きさの魔方陣を 100個 出力します
+
 `$ python main.py --n <次数> --output_path <出力先のパス>`
 
-`例) $ python main.py --n 5 --output_path .` ( 5次魔方陣の生成 )
+`例) $ python main.py --n 5 --output_path ./` ( 5次魔方陣の生成 )
+
+出力先のファイル形式
+
+- log_ms5.csv : 5次魔方陣 が 100個
+- lof_semi_ms5.csv : 5次半魔方陣
 
 ## 引数の説明
 - --n : 次数 (魔方陣の1辺の長さ)
